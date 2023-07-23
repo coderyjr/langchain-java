@@ -39,10 +39,11 @@ public class ChatExample {
                 .init();
 
         var result = chat.predictMessages(
-                List.of(new HumanMessage("Translate this sentence from English to French. I love programming.")));
+                List.of(new HumanMessage("Translate this sentence from English to Chinese. I love programming.")
+                ,new HumanMessage("and this sentence. I love swimming.")));
         println(result);
 
-        var output = chat.predict("Translate this sentence from English to French. I love programming.");
+        var output = chat.predict("and this sentence. I love swimming.");
         println(output);
     }
 }

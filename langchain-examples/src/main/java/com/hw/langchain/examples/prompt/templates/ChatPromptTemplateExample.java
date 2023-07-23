@@ -18,10 +18,13 @@
 
 package com.hw.langchain.examples.prompt.templates;
 
+import com.hw.langchain.chat.models.openai.ChatOpenAI;
 import com.hw.langchain.examples.runner.RunnableExample;
+import com.hw.langchain.llms.openai.OpenAI;
 import com.hw.langchain.prompts.chat.ChatPromptTemplate;
 import com.hw.langchain.prompts.chat.HumanMessagePromptTemplate;
 import com.hw.langchain.prompts.chat.SystemMessagePromptTemplate;
+import com.hw.langchain.schema.BaseMessage;
 
 import java.util.List;
 import java.util.Map;
@@ -35,6 +38,13 @@ import static com.hw.langchain.examples.utils.PrintUtils.println;
 public class ChatPromptTemplateExample {
 
     public static void main(String[] args) {
+
+        //初始化
+        var chat = ChatOpenAI.builder()
+                .temperature(0)
+                .build()
+                .init();
+
         var template = "You are a helpful assistant that translates {input_language} to {output_language}.";
         var systemMessagePrompt = SystemMessagePromptTemplate.fromTemplate(template);
 
@@ -42,8 +52,11 @@ public class ChatPromptTemplateExample {
         var humanMessagePrompt = HumanMessagePromptTemplate.fromTemplate(humanTemplate);
 
         var chatPrompt = ChatPromptTemplate.fromMessages(List.of(systemMessagePrompt, humanMessagePrompt));
-        var output = chatPrompt.formatMessages(Map.of("input_language", "English", "output_language", "French",
+        var chatMessage = chatPrompt.formatMessages(Map.of("input_language", "English", "output_language", "Chinese",
                 "text", "I love programming."));
-        println(output);
+        BaseMessage baseMessage = chat.predictMessages(chatMessage);
+
+
+        println(baseMessage.getContent());
     }
 }

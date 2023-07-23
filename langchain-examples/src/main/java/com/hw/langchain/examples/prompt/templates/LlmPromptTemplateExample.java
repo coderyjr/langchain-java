@@ -19,6 +19,7 @@
 package com.hw.langchain.examples.prompt.templates;
 
 import com.hw.langchain.examples.runner.RunnableExample;
+import com.hw.langchain.llms.openai.OpenAI;
 import com.hw.langchain.prompts.prompt.PromptTemplate;
 
 import java.util.Map;
@@ -32,8 +33,18 @@ import static com.hw.langchain.examples.utils.PrintUtils.println;
 public class LlmPromptTemplateExample {
 
     public static void main(String[] args) {
+
+        //初始化
+        var llm = OpenAI.builder()
+                .temperature(0.9f)
+                .build()
+                .init();
+        //构造模板
         var prompt = PromptTemplate.fromTemplate("What is a good name for a company that makes {product}?");
-        var output = prompt.format(Map.of("product", "colorful socks"));
-        println(output);
+        var output = prompt.format(Map.of("product", "iceCreme"));
+
+        //调用API
+        String predict = llm.predict(output);
+        println(predict);
     }
 }
